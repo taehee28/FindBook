@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">FindBook</string>
+
+    <string name="search_book">책 검색</string>
+    <string name="recent_searches">최근 검색어</string>
+    <string name="search">검색</string>
 </resources>
