@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.thk.findbook.R
-import com.thk.findbook.models.SearchResult
+import com.thk.findbook.models.Book
 
 @Composable
 fun SearchScreen() {
@@ -84,7 +84,7 @@ private fun SearchBox(
 
 @Composable
 private fun SearchResultList(
-    results: List<SearchResult>
+    results: List<Book>
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize()

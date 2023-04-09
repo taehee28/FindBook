@@ -1,6 +1,6 @@
 package com.thk.findbook.models
 
-data class SearchResult(
+data class Book(
     val link: String,
     val imageUrl: String,
     val title: String,
