@@ -43,6 +43,7 @@ fun SearchScreen() {
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // TODO: 실제 데이터 넘기기
             SearchResultList(results = emptyList())
         }
     }
@@ -52,7 +53,10 @@ fun SearchScreen() {
 private fun RecentSearchesAction(
     onClick: () -> Unit
 ) = TextButton(onClick = onClick) {
-    Text(text = stringResource(id = R.string.recent_searches))
+    Text(
+        text = stringResource(id = R.string.recent_searches),
+        color = MaterialTheme.colors.onPrimary
+    )
 }
 
 @Composable
