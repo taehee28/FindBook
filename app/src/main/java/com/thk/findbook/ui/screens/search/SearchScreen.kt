@@ -2,6 +2,7 @@
 
 package com.thk.findbook.ui.screens.search
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,15 +15,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.thk.findbook.R
 import com.thk.findbook.models.Book
+import com.thk.findbook.ui.viewmodels.SearchViewModel
 
 @Composable
 fun SearchScreen(
+    viewModel: SearchViewModel = hiltViewModel(),
     navigateToRecentSearches: () -> Unit
 ) {
+    val searchResults by viewModel.searchResult.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -41,13 +47,15 @@ fun SearchScreen(
             SearchBox(
                 text = text,
                 onTextChange = { text = it },
-                onSearchClick = { /*TODO: 검색 버튼 클릭*/ }
+                onSearchClick = {
+                    viewModel.searchBook(text)
+                }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             // TODO: 실제 데이터 넘기기
-            SearchResultList(results = emptyList())
+            SearchResultList(results = searchResults ?: emptyList())
         }
     }
 }
@@ -89,6 +97,7 @@ private fun SearchBox(
 private fun SearchResultList(
     results: List<Book>
 ) {
+    Log.d("TAG", "SearchResultList: size = ${results.size}")
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {

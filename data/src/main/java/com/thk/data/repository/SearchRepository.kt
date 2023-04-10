@@ -18,6 +18,8 @@ class SearchRepositoryImpl @Inject constructor(
     override fun searchBook(keyword: String): Flow<List<BookEntity>> = flow {
         val response = remoteApi.getSearchResult(keyword)
         logd(">> response = $response")
+
+        emit(response.items)
     }
 
     override suspend fun insertRecentSearch(keyword: String) {
