@@ -8,6 +8,6 @@ interface BookApiInterface {
     @GET("book.json")
     suspend fun getSearchResult(
         @Query("query") keyword: String,
-        @Query("start") pageIndex: Int = 1
+        @Query("start") start: Int = 1
     ): BookSearchResponse
 }

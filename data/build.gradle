@@ -51,4 +51,7 @@ dependencies {
 
     // JavaX Inject
     implementation ("javax.inject:javax.inject:1")
+
+    // Paigng3
+    implementation("androidx.paging:paging-runtime:$paging_version")
 }
