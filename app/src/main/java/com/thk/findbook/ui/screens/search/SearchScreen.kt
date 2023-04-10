@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -48,13 +49,13 @@ fun SearchScreen(
                 text = text,
                 onTextChange = { text = it },
                 onSearchClick = {
-                    viewModel.searchBook(text)
+                    // TODO: 빈칸 검색 불가 안내 토스트
+                    if (text.isNotBlank()) viewModel.searchBook(text)
                 }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // TODO: 실제 데이터 넘기기
             SearchResultList(results = searchResults ?: emptyList())
         }
     }
@@ -83,7 +84,8 @@ private fun SearchBox(
         value = text,
         onValueChange = onTextChange,
         modifier = Modifier.weight(1f),
-        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent)
+        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+        singleLine = true
     )
 
     Button(
@@ -109,7 +111,7 @@ private fun SearchResultList(
                 imageUrl = result.imageUrl,
                 title = result.title,
                 author = result.author,
-                publisher = result.author,
+                publisher = result.publisher,
                 discount = result.discount,
                 onClick = { /*TODO: 웹페이지로 이동*/ }
             )
@@ -128,21 +130,30 @@ private fun SearchResultItem(
 ) = Row(
     modifier = Modifier
         .fillMaxWidth()
+        .padding(horizontal = 4.dp, vertical = 2.dp)
         .clickable(onClick = onClick)
 ) {
     GlideImage(
         model = imageUrl,
         contentDescription = title,
-        modifier = Modifier
-            .width(30.dp)
-            .height(50.dp)
+        modifier = Modifier.width(100.dp)
     )
 
-    Column {
-        Text(text = "제목: $title")
-        Text(text = "저자: $author")
-        Text(text = "출판사: $publisher")
-        Text(text = "가격: $discount")
+    Spacer(modifier = Modifier.width(4.dp))
+
+    Column(
+        verticalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Text(text = "제목: $title", fontSize = 14.sp)
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Text(text = "저자: $author", fontSize = 12.sp)
+        Text(text = "출판사: $publisher", fontSize = 12.sp)
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Text(text = "가격: $discount", fontSize = 12.sp)
     }
 }
 
