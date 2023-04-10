@@ -48,7 +48,6 @@ fun SearchScreen(
                 title = { Text(text = stringResource(id = R.string.search_book)) },
                 actions = {
                     RecentSearchesAction {
-                        // TODO: 최근 검색어 화면으로 이동
                         navigateToRecentSearches()
                     }
                 }
@@ -60,7 +59,9 @@ fun SearchScreen(
 
             SearchBox(
                 text = text,
-                onTextChange = { text = it },
+                onTextChange = {
+                    if (it.length <= 20) text = it
+                },
                 onSearchClick = {
                     // TODO: 빈칸 검색 불가 안내 토스트
                     if (text.isNotBlank()) viewModel.searchBook(text)
