@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalGlideComposeApi::class)
 
-package com.thk.findbook.ui.screens
+package com.thk.findbook.ui.screens.search
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,7 +20,9 @@ import com.thk.findbook.R
 import com.thk.findbook.models.Book
 
 @Composable
-fun SearchScreen() {
+fun SearchScreen(
+    navigateToRecentSearches: () -> Unit
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -28,6 +30,7 @@ fun SearchScreen() {
                 actions = {
                     RecentSearchesAction {
                         // TODO: 최근 검색어 화면으로 이동
+                        navigateToRecentSearches()
                     }
                 }
             )
@@ -137,7 +140,9 @@ private fun SearchResultItem(
 @Preview
 @Composable
 private fun SearchScreenPreview() {
-    SearchScreen()
+    SearchScreen(
+        navigateToRecentSearches = {}
+    )
 }
 
 @Preview

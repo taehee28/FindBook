@@ -1,5 +1,7 @@
-package com.thk.findbook.ui.screens
+package com.thk.findbook.ui.screens.recentsearches
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +19,13 @@ import com.thk.findbook.R
 import com.thk.findbook.models.RecentSearch
 
 @Composable
-fun RecentSearchesScreen() {
+fun RecentSearchesScreen(
+    navigateToSearchScreen: (String) -> Unit
+) {
+    BackHandler {
+        navigateToSearchScreen("")
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -32,6 +40,7 @@ fun RecentSearchesScreen() {
     ) { paddingValues ->
         RecentSearchesList(
             keywords = emptyList(),     // TODO: 실제 데이터 넘기기
+            onKeywordClick = { navigateToSearchScreen(it) },
             modifier = Modifier.padding(paddingValues)
         )
     }
@@ -50,6 +59,7 @@ private fun DeleteAllAction(
 @Composable
 private fun RecentSearchesList(
     keywords: List<RecentSearch>,
+    onKeywordClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -61,7 +71,7 @@ private fun RecentSearchesList(
         ) { recentSearch ->
             RecentSearchItem(
                 keyword = recentSearch.keyword,
-                onKeywordClick = { /*TODO: 누르면 이전 화면으로 키워드 보내면서 검색*/ }
+                onKeywordClick = onKeywordClick
             )
         }
     }
@@ -77,13 +87,18 @@ private fun RecentSearchItem(
         .padding(horizontal = 16.dp, vertical = 8.dp),
     contentAlignment = Alignment.CenterStart
 ) {
-    Text(text = keyword)
+    Text(
+        text = keyword,
+        modifier = Modifier.clickable { onKeywordClick(keyword) }
+    )
 }
 
 @Preview
 @Composable
 private fun RecentSearchesScreenPreview() {
-    RecentSearchesScreen()
+    RecentSearchesScreen(
+        navigateToSearchScreen = {}
+    )
 }
 
 @Preview
