@@ -2,6 +2,8 @@ package com.thk.findbook.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.thk.data.repository.SearchRepository
 import com.thk.findbook.models.Book
 import com.thk.findbook.models.toBook
@@ -15,19 +17,22 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val repository: SearchRepository
 ) : ViewModel() {
+    private val _searchPaging: MutableStateFlow<PagingData<Book>> = MutableStateFlow(PagingData.empty())
+    val searchPaging: StateFlow<PagingData<Book>>
+        get() = _searchPaging.asStateFlow()
 
-    private val _searchResult: MutableStateFlow<List<Book>> = MutableStateFlow(emptyList())
-    val searchResult: StateFlow<List<Book>>
-        get() = _searchResult.asStateFlow()
-
-    fun searchBook(keyword: String) = viewModelScope.launch {
-        repository.searchBook(keyword)
-            .map {
-                it.map { it.toBook() }
-            }
-            .collectLatest {
-                logd(">> collect = $it")
-                _searchResult.value = it
-            }
+    fun searchBook(keyword: String) {
+        viewModelScope.launch {
+            repository.searchBook(keyword)
+                .mapLatest { pagingData ->
+                    pagingData.map { bookEntity ->
+                        bookEntity.toBook()
+                    }
+                }.catch {
+                    it.printStackTrace()
+                }.collectLatest {
+                    _searchPaging.value = it
+                }
+        }
     }
 }

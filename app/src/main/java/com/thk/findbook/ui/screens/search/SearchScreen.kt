@@ -17,6 +17,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.thk.findbook.R
@@ -28,7 +32,7 @@ fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel(),
     navigateToRecentSearches: () -> Unit
 ) {
-    val searchResults by viewModel.searchResult.collectAsState()
+    val searchResults: LazyPagingItems<Book> = viewModel.searchPaging.collectAsLazyPagingItems()
 
     Scaffold(
         topBar = {
@@ -45,6 +49,7 @@ fun SearchScreen(
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             var text by remember { mutableStateOf("") }
+
             SearchBox(
                 text = text,
                 onTextChange = { text = it },
@@ -56,7 +61,7 @@ fun SearchScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            SearchResultList(results = searchResults ?: emptyList())
+            SearchResultList(results = searchResults)
         }
     }
 }
@@ -97,24 +102,51 @@ private fun SearchBox(
 
 @Composable
 private fun SearchResultList(
-    results: List<Book>
+    results: LazyPagingItems<Book>
 ) {
-    Log.d("TAG", "SearchResultList: size = ${results.size}")
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
+
         items(
             items = results,
-            key = { it.title }
-        ) { result ->
+            key = { item: Book ->
+                item.title
+            }
+        ) { book: Book? ->
             SearchResultItem(
-                imageUrl = result.imageUrl,
-                title = result.title,
-                author = result.author,
-                publisher = result.publisher,
-                discount = result.discount,
+                imageUrl = book?.imageUrl ?: "",
+                title = book?.title ?: "",
+                author = book?.author ?: "",
+                publisher = book?.publisher ?: "",
+                discount = book?.discount ?: "",
                 onClick = { /*TODO: 웹페이지로 이동*/ }
             )
+
+            Divider()
+        }
+
+        when (results.loadState.refresh) {
+            is LoadState.Error -> {
+                item {
+                    StateText(text = "로딩에 실패했습니다.")
+                }
+            }
+            else -> {}
+        }
+
+        when (results.loadState.append) {
+            is LoadState.Error -> {
+                item {
+                    StateText(text = "로딩에 실패했습니다.")
+                }
+            }
+            is LoadState.Loading -> {
+                item {
+                    StateText(text = "로딩 중...")
+                }
+            }
+            else -> {}
         }
     }
 }
@@ -155,6 +187,18 @@ private fun SearchResultItem(
 
         Text(text = "가격: $discount", fontSize = 12.sp)
     }
+}
+
+@Composable
+private fun StateText(
+    text: String
+) = Box(
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 16.dp),
+    contentAlignment = Alignment.Center
+) {
+    Text(text = text)
 }
 
 @Preview
