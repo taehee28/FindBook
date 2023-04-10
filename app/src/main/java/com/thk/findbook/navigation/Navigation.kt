@@ -25,11 +25,16 @@ fun SetupNavigation() {
     }
 }
 
-fun NavController.navigateToSearchScreen(keyword: String = "") {
-    val route = "search".apply {
-        if (keyword.isNotEmpty()) plus("?$ARG_KEY_KEYWORD=$keyword")
+fun NavController.navigateToSearchScreen(keyword: String) {
+    val route = "search".run {
+        if (keyword.isNotEmpty()) {
+            plus("?$ARG_KEY_KEYWORD=$keyword")
+        } else {
+            this
+        }
     }
     logd(">> rout = $route")
+
     navigate(route) {
         popUpTo(Screen.SEARCH.route)
     }
@@ -40,7 +45,7 @@ fun NavController.navigateToRecentSearches() {
 }
 
 fun NavGraphBuilder.searchScreenComposable(
-    navigateToRecentSearches: () -> Unit
+    navigateToRecentSearches: () -> Unit,
 ) {
     composable(
         route = Screen.SEARCH.route,
@@ -52,11 +57,16 @@ fun NavGraphBuilder.searchScreenComposable(
             }
         )
     ) { navBackStackEntry ->
+
+
         // TODO: viewModel을 거쳐서 처리?
         val keyword: String? = navBackStackEntry.arguments?.getString(ARG_KEY_KEYWORD)
         logd(">> keyword = ${keyword==null}")
 
-        SearchScreen(navigateToRecentSearches = navigateToRecentSearches)
+        SearchScreen(
+            keyword = keyword,
+            navigateToRecentSearches = navigateToRecentSearches
+        )
     }
 }
 

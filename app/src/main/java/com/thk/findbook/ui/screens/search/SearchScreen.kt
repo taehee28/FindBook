@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -26,13 +27,20 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.thk.findbook.R
 import com.thk.findbook.models.Book
 import com.thk.findbook.ui.viewmodels.SearchViewModel
+import com.thk.findbook.utils.logd
 
 @Composable
 fun SearchScreen(
-    viewModel: SearchViewModel = hiltViewModel(),
-    navigateToRecentSearches: () -> Unit
+    navigateToRecentSearches: () -> Unit,
+    keyword: String?,
+    viewModel: SearchViewModel = hiltViewModel()
 ) {
     val searchResults: LazyPagingItems<Book> = viewModel.searchPaging.collectAsLazyPagingItems()
+
+    LaunchedEffect(Unit) {
+        logd(">> LaunchedEffect")
+        keyword?.also { viewModel.searchBook(keyword) }
+    }
 
     Scaffold(
         topBar = {
@@ -48,7 +56,7 @@ fun SearchScreen(
         }
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
-            var text by remember { mutableStateOf("") }
+            var text by remember { mutableStateOf(keyword ?: "") }
 
             SearchBox(
                 text = text,
@@ -205,7 +213,9 @@ private fun StateText(
 @Composable
 private fun SearchScreenPreview() {
     SearchScreen(
-        navigateToRecentSearches = {}
+        keyword = "",
+        navigateToRecentSearches = {},
+        viewModel = viewModel()
     )
 }
 

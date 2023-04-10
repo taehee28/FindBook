@@ -16,14 +16,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.thk.findbook.R
 import com.thk.findbook.models.RecentSearch
 import com.thk.findbook.ui.viewmodels.RecentSearchesViewModel
 
 @Composable
 fun RecentSearchesScreen(
-    viewModel: RecentSearchesViewModel = hiltViewModel(),
-    navigateToSearchScreen: (String) -> Unit
+    navigateToSearchScreen: (String) -> Unit,
+    viewModel: RecentSearchesViewModel = hiltViewModel()
 ) {
     val searches by viewModel.recentSearches.collectAsState()
 
@@ -103,7 +104,8 @@ private fun RecentSearchItem(
 @Composable
 private fun RecentSearchesScreenPreview() {
     RecentSearchesScreen(
-        navigateToSearchScreen = {}
+        navigateToSearchScreen = {},
+        viewModel = viewModel()
     )
 }
 

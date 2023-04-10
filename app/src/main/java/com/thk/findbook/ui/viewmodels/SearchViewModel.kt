@@ -17,11 +17,16 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val repository: SearchRepository
 ) : ViewModel() {
+    init {
+        logd(">> init~~~~")
+    }
+
     private val _searchPaging: MutableStateFlow<PagingData<Book>> = MutableStateFlow(PagingData.empty())
     val searchPaging: StateFlow<PagingData<Book>>
         get() = _searchPaging.asStateFlow()
 
     fun searchBook(keyword: String) {
+        logd(">> searchBook -> $keyword")
         viewModelScope.launch {
             repository.searchBook(keyword)
                 .mapLatest { pagingData ->

@@ -1,10 +1,16 @@
 package com.thk.data.models
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.thk.data.local.DBInfo
 
-@Entity(tableName = DBInfo.TABLE_NAME)
+@Entity(
+    tableName = DBInfo.TABLE_NAME,
+    indices = [
+        Index(value = ["keyword"], unique = true)
+    ]
+)
 data class RecentSearchEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
