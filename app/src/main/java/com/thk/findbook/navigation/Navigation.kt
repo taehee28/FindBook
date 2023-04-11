@@ -36,7 +36,9 @@ fun NavController.navigateToSearchScreen(keyword: String) {
     logd(">> rout = $route")
 
     navigate(route) {
-        popUpTo(Screen.SEARCH.route)
+        popUpTo(Screen.SEARCH.route) {
+            inclusive = true
+        }
     }
 }
 
@@ -57,11 +59,8 @@ fun NavGraphBuilder.searchScreenComposable(
             }
         )
     ) { navBackStackEntry ->
-
-
-        // TODO: viewModel을 거쳐서 처리?
         val keyword: String? = navBackStackEntry.arguments?.getString(ARG_KEY_KEYWORD)
-        logd(">> keyword = ${keyword==null}")
+        logd(">> keyword is null? = ${keyword==null}")
 
         SearchScreen(
             keyword = keyword,
