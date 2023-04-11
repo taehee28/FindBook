@@ -70,7 +70,7 @@ fun SearchScreen(
                     if (text.isNotBlank()) {
                         viewModel.searchBook(text)
                     } else {
-                        Toast.makeText(context, "검색어를 입력해주세요!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, R.string.toast_blank_keyword, Toast.LENGTH_LONG).show()
                     }
                 }
             )
@@ -147,7 +147,7 @@ private fun SearchResultList(
         when (results.loadState.refresh) {
             is LoadState.Error -> {
                 item {
-                    StateText(text = "로딩에 실패했습니다.")
+                    StateText(text = stringResource(id = R.string.loading_failed))
                 }
             }
             else -> {}
@@ -156,12 +156,12 @@ private fun SearchResultList(
         when (results.loadState.append) {
             is LoadState.Error -> {
                 item {
-                    StateText(text = "로딩에 실패했습니다.")
+                    StateText(text = stringResource(id = R.string.loading_failed))
                 }
             }
             is LoadState.Loading -> {
                 item {
-                    StateText(text = "로딩 중...")
+                    StateText(text = stringResource(id = R.string.now_loading))
                 }
             }
             else -> {}
@@ -194,16 +194,16 @@ private fun SearchResultItem(
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
-        Text(text = "제목: $title", fontSize = 14.sp)
+        Text(text = stringResource(id = R.string.label_title).format(title), fontSize = 14.sp)
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        Text(text = "저자: $author", fontSize = 12.sp)
-        Text(text = "출판사: $publisher", fontSize = 12.sp)
+        Text(text = stringResource(id = R.string.label_author).format(author), fontSize = 12.sp)
+        Text(text = stringResource(id = R.string.label_publisher).format(publisher), fontSize = 12.sp)
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        Text(text = "가격: $discount", fontSize = 12.sp)
+        Text(text = stringResource(id = R.string.label_discount).format(discount), fontSize = 12.sp)
     }
 }
 

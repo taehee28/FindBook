@@ -5,4 +5,14 @@
     <string name="recent_searches">최근 검색어</string>
     <string name="search">검색</string>
     <string name="delete_all">전체 삭제</string>
+
+    <string name="toast_blank_keyword">검색어를 입력해주세요!</string>
+
+    <string name="loading_failed">로딩에 실패했습니다.</string>
+    <string name="now_loading">로딩 중...</string>
+
+    <string name="label_title">제목: %s</string>
+    <string name="label_author">저자: %s</string>
+    <string name="label_publisher">출판사: %s</string>
+    <string name="label_discount">가격: %s</string>
 </resources>
