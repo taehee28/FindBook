@@ -3,6 +3,7 @@
 package com.thk.findbook.ui.screens.search
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,6 +59,7 @@ fun SearchScreen(
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             var text by remember { mutableStateOf(keyword ?: "") }
+            val context = LocalContext.current
 
             SearchBox(
                 text = text,
@@ -64,8 +67,11 @@ fun SearchScreen(
                     if (it.length <= 20) text = it
                 },
                 onSearchClick = {
-                    // TODO: 빈칸 검색 불가 안내 토스트
-                    if (text.isNotBlank()) viewModel.searchBook(text)
+                    if (text.isNotBlank()) {
+                        viewModel.searchBook(text)
+                    } else {
+                        Toast.makeText(context, "검색어를 입력해주세요!", Toast.LENGTH_LONG).show()
+                    }
                 }
             )
 
