@@ -10,6 +10,9 @@ import retrofit2.HttpException
 private const val STARTING = 1
 private const val PAGE_UNIT = 10
 
+/**
+ * 책 검색 API 호출 페이징 처리하는 클래스
+ */
 class BookPagingSource(
     private val keyword: String,
     private val remoteApi: BookApiInterface

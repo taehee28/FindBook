@@ -10,7 +10,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.thk.findbook.ui.screens.recentsearches.RecentSearchesScreen
 import com.thk.findbook.ui.screens.search.SearchScreen
-import com.thk.findbook.utils.logd
 
 @Composable
 fun SetupNavigation() {
@@ -25,7 +24,12 @@ fun SetupNavigation() {
     }
 }
 
+/**
+ * [SearchScreen]으로 이동하는 [NavController]의 확장 함수
+ */
 fun NavController.navigateToSearchScreen(keyword: String) {
+    // 파라미터로 넘어온 검색 키워드가 있는 경우에만
+    // route 뒤에 쿼리문을 붙여줌
     val route = "search".run {
         if (keyword.isNotEmpty()) {
             plus("?$ARG_KEY_KEYWORD=$keyword")
@@ -33,7 +37,6 @@ fun NavController.navigateToSearchScreen(keyword: String) {
             this
         }
     }
-    logd(">> rout = $route")
 
     navigate(route) {
         popUpTo(Screen.SEARCH.route) {
@@ -42,10 +45,16 @@ fun NavController.navigateToSearchScreen(keyword: String) {
     }
 }
 
+/**
+ * [RecentSearchesScreen]으로 이동하는 [NavController]의 확장 함수
+ */
 fun NavController.navigateToRecentSearches() {
     navigate(Screen.RECENT_SEARCHES.route)
 }
 
+/**
+ * [SearchScreen]을 호출하는 [NavGraphBuilder]의 확장 함수
+ */
 fun NavGraphBuilder.searchScreenComposable(
     navigateToRecentSearches: () -> Unit,
 ) {
@@ -60,7 +69,6 @@ fun NavGraphBuilder.searchScreenComposable(
         )
     ) { navBackStackEntry ->
         val keyword: String? = navBackStackEntry.arguments?.getString(ARG_KEY_KEYWORD)
-        logd(">> keyword is null? = ${keyword==null}")
 
         SearchScreen(
             keyword = keyword,
@@ -69,6 +77,9 @@ fun NavGraphBuilder.searchScreenComposable(
     }
 }
 
+/**
+ * [RecentSearchesScreen]을 호출하는 [NavGraphBuilder]의 확장 함수
+ */
 fun NavGraphBuilder.recentSearchesScreenComposable(
     navigateToSearchScreen: (String) -> Unit
 ) {

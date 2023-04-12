@@ -5,6 +5,9 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.thk.data.local.DBInfo
 
+/**
+ * 최근 검색어 데이터 클래스
+ */
 @Entity(
     tableName = DBInfo.TABLE_NAME,
     indices = [

@@ -4,7 +4,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -21,6 +20,9 @@ import com.thk.findbook.R
 import com.thk.findbook.models.RecentSearch
 import com.thk.findbook.ui.viewmodels.RecentSearchesViewModel
 
+/**
+ * 최근 검색어 화면
+ */
 @Composable
 fun RecentSearchesScreen(
     navigateToSearchScreen: (String) -> Unit,
@@ -28,6 +30,7 @@ fun RecentSearchesScreen(
 ) {
     val searches by viewModel.recentSearches.collectAsState()
 
+    // 디바이스의 뒤로가기 키 핸들러
     BackHandler {
         navigateToSearchScreen("")
     }
@@ -50,6 +53,9 @@ fun RecentSearchesScreen(
     }
 }
 
+/**
+ * [TopAppBar]의 전체삭제 Action
+ */
 @Composable
 private fun DeleteAllAction(
     onClick: () -> Unit
@@ -60,6 +66,9 @@ private fun DeleteAllAction(
     )
 }
 
+/**
+ * 최근 검색어들을 표시하는 리스트
+ */
 @Composable
 private fun RecentSearchesList(
     searchList: List<RecentSearch>,
@@ -79,6 +88,7 @@ private fun RecentSearchesList(
                 onKeywordClick = onKeywordClick
             )
 
+            // 맨 마지막(하단)의 검색어인 경우 Divider 표시하지 않음
             if (index < searchList.lastIndex) {
                 Divider()
             }
@@ -86,6 +96,9 @@ private fun RecentSearchesList(
     }
 }
 
+/**
+ * 리스트에 표시 할 최근 검색어 View
+ */
 @Composable
 private fun RecentSearchItem(
     keyword: String,

@@ -13,10 +13,16 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * 최근 검색어 화면에서 사용할 ViewModel
+ */
 @HiltViewModel
 class RecentSearchesViewModel @Inject constructor(
     private val repository: RecentSearchesRepository
 ) : ViewModel() {
+    /**
+     * 최근 검색어 리스트의 Flow
+     */
     val recentSearches: StateFlow<List<RecentSearch>> = repository.getRecentSearches()
         .mapLatest { list ->
             list.map { it.toRecentSearch() }
@@ -27,6 +33,9 @@ class RecentSearchesViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
+    /**
+     * 검색어 전체 삭제
+     */
     fun deleteAll() = viewModelScope.launch {
         repository.deleteAll()
     }

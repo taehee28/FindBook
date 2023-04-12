@@ -2,12 +2,10 @@
 
 package com.thk.findbook.ui.screens.search
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -30,8 +28,10 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.thk.findbook.R
 import com.thk.findbook.models.Book
 import com.thk.findbook.ui.viewmodels.SearchViewModel
-import com.thk.findbook.utils.logd
 
+/**
+ * 검색 화면
+ */
 @Composable
 fun SearchScreen(
     navigateToRecentSearches: () -> Unit,
@@ -40,8 +40,8 @@ fun SearchScreen(
 ) {
     val searchResults: LazyPagingItems<Book> = viewModel.searchPaging.collectAsLazyPagingItems()
 
+    // 넘어온 키워드가 있는 경우 검색
     LaunchedEffect(Unit) {
-        logd(">> LaunchedEffect")
         keyword?.also { viewModel.searchBook(keyword) }
     }
 
@@ -67,6 +67,7 @@ fun SearchScreen(
                     if (it.length <= 20) text = it
                 },
                 onSearchClick = {
+                    // 검색 버튼 클릭 시 빈칸인지 확인
                     if (text.isNotBlank()) {
                         viewModel.searchBook(text)
                     } else {
@@ -82,6 +83,9 @@ fun SearchScreen(
     }
 }
 
+/**
+ * [TopAppBar]의 최근 검색어 Action
+ */
 @Composable
 private fun RecentSearchesAction(
     onClick: () -> Unit
@@ -92,6 +96,9 @@ private fun RecentSearchesAction(
     )
 }
 
+/**
+ * 검색어 입력하는 [TextField]와 [Button]
+ */
 @Composable
 private fun SearchBox(
     text: String,
@@ -116,6 +123,9 @@ private fun SearchBox(
     }
 }
 
+/**
+ * 검색 결과 표시하는 리스트
+ */
 @Composable
 private fun SearchResultList(
     results: LazyPagingItems<Book>
@@ -144,6 +154,7 @@ private fun SearchResultList(
             Divider()
         }
 
+        // PagingData의 상태가 refresh인 경우
         when (results.loadState.refresh) {
             is LoadState.Error -> {
                 item {
@@ -153,6 +164,7 @@ private fun SearchResultList(
             else -> {}
         }
 
+        // PagingData의 상태가 append인 경우
         when (results.loadState.append) {
             is LoadState.Error -> {
                 item {
@@ -169,6 +181,9 @@ private fun SearchResultList(
     }
 }
 
+/**
+ * 검색 결과 리스트에 표시할 검색 결과 View
+ */
 @Composable
 private fun SearchResultItem(
     imageUrl: String,
@@ -207,6 +222,9 @@ private fun SearchResultItem(
     }
 }
 
+/**
+ * PagingData의 LoadingState에 따라 표시할 [Text]
+ */
 @Composable
 private fun StateText(
     text: String

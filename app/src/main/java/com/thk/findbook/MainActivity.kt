@@ -14,12 +14,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             FindBookTheme {
                 SetupNavigation()
-                /*Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-
-                }*/
             }
         }
     }

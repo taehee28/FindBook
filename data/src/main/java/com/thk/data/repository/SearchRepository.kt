@@ -17,6 +17,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+/**
+ * 책 검색 Repository
+ */
 interface SearchRepository {
     suspend fun searchBook(keyword: String): Flow<PagingData<BookEntity>>
 }
@@ -30,14 +33,18 @@ class SearchRepositoryImpl @Inject constructor(
 
     override suspend fun searchBook(keyword: String): Flow<PagingData<BookEntity>> {
         withContext(ioDispatcher) {
+            // 검색한 키워드를 저장하고
             dao.insertRecentSearch(RecentSearchEntity.of(keyword))
 
+            // 개수를 확인해서 10개가 넘으면
+            // 오래된 키워드를 삭제
             val count = dao.getRowCount()
             if (count > 10) {
                 dao.deleteOverflows()
             }
         }
 
+        // PagingData를 리턴
         return Pager(
             config = PagingConfig(
                 pageSize = 1
